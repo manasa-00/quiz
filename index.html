@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Funny Logic Quiz</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to top, #87ceeb 70%, #ffffff 100%);
+      overflow-x: hidden;
+    }
+
+    .rainbow-bg {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      width: 100vw;
+      height: 500px;
+      background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
+      border-radius: 0 0 100% 100%;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .house {
+      position: absolute;
+      bottom: 0;
+      left: 50px;
+      width: 140px;
+      height: 100px;
+      background: #ffe4b5;
+      border: 2px solid #a0522d;
+      z-index: 2;
+    }
+
+    .roof {
+      position: absolute;
+      top: -40px;
+      width: 0;
+      height: 0;
+      border-left: 70px solid transparent;
+      border-right: 70px solid transparent;
+      border-bottom: 40px solid #8b0000;
+    }
+
+    .door {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 50px;
+      background: #654321;
+    }
+
+    .friend {
+      position: absolute;
+      bottom: 0;
+      width: 30px;
+      height: 60px;
+      border-radius: 10px;
+      z-index: 2;
+    }
+
+    .friend::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 6px;
+      width: 18px;
+      height: 18px;
+      background: #ffc;
+      border-radius: 50%;
+      border: 2px solid #555;
+    }
+
+    .friend1 {
+      left: 200px;
+      background: #ffb6c1;
+    }
+
+    .friend2 {
+      left: 250px;
+      background: #add8e6;
+    }
+
+    .bird {
+      position: absolute;
+      width: 40px;
+      height: 20px;
+      animation: fly 12s linear infinite;
+      z-index: 1;
+    }
+
+    .bird::before, .bird::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid black;
+      border-radius: 50%;
+      transform: rotate(45deg);
+      border-bottom: none;
+      border-right: none;
+    }
+
+    .bird::before { left: 0; }
+    .bird::after { right: 0; }
+
+    @keyframes fly {
+      0% { left: -60px; }
+      100% { left: 100vw; }
+    }
+
+    .tree {
+      position: absolute;
+      bottom: 0;
+      width: 40px;
+    }
+
+    .trunk {
+      background: #8B4513;
+      width: 10px;
+      height: 40px;
+      margin: auto;
+    }
+
+    .leaves {
+      width: 0;
+      height: 0;
+      border-left: 25px solid transparent;
+      border-right: 25px solid transparent;
+      border-bottom: 40px solid green;
+      margin-top: -5px;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 700px;
+      margin: 130px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .quiz-question {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .quiz-options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      background-color: #e0f7fa; /* Snow blue */
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .quiz-options button:hover {
+      background-color: #b2ebf2;
+    }
+
+    .joke-section {
+      display: none;
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #fff8e1;
+      border: 1px solid #fbc02d;
+      border-radius: 8px;
+    }
+
+    #fetchJoke {
+      background-color: #29b6f6;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      margin-top: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #fetchJoke:hover {
+      background-color: #0288d1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="rainbow-bg"></div>
+  <div class="house"><div class="roof"></div><div class="door"></div></div>
+  <div class="friend friend1"></div>
+  <div class="friend friend2"></div>
+  <div class="bird" style="top: 60px; animation-delay: 0s;"></div>
+  <div class="bird" style="top: 90px; animation-delay: 3s;"></div>
+  <div class="bird" style="top: 120px; animation-delay: 6s;"></div>
+
+  <div class="tree" style="left: 20px;"><div class="trunk"></div><div class="leaves"></div></div>
+  <div class="tree" style="left: 100px;"><div class="trunk"></div><div class="leaves"></div></div>
+  <div class="tree" style="left: 180px;"><div class="trunk"></div><div class="leaves"></div></div>
+
+  <div class="container">
+    <h1>Funny Quiz 😄</h1>
+
+    <div class="quiz-question" id="question"></div>
+    <div class="quiz-options" id="options"></div>
+
+    <div class="joke-section" id="jokeSection">
+      <h3>You're a quiz master! Here's a joke 🤣</h3>
+      <p id="joke">Click below to make your day!</p>
+      <button id="fetchJoke">Get Joke</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q: "What goes up but never comes down?",
+        options: ["Your phone", "Your salary", "Your age", "Your mood"],
+        correct: 2
+      },
+      {
+        q: "What has hands but can’t clap?",
+        options: ["A robot", "A baby", "A clock", "A lazy cat"],
+        correct: 2
+      },
+      {
+        q: "What gets wetter the more it dries?",
+        options: ["A fish", "A sponge", "A towel", "A cloud"],
+        correct: 2
+      },
+      {
+        q: "I speak without a mouth and hear without ears. What am I?",
+        options: ["A ghost", "A parrot", "An echo", "A phone"],
+        correct: 2
+      }
+    ];
+
+    let current = 0;
+
+    function showQuestion() {
+      const q = questions[current];
+      document.getElementById("question").textContent = "Q" + (current + 1) + ": " + q.q;
+
+      const optDiv = document.getElementById("options");
+      optDiv.innerHTML = "";
+
+      q.options.forEach((text, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = text;
+        btn.onclick = () => checkAnswer(i);
+        optDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(index) {
+      const q = questions[current];
+      if (index === q.correct) {
+        current++;
+        if (current < questions.length) {
+          showQuestion();
+        } else {
+          document.getElementById("question").textContent = "🎉 Quiz Completed!";
+          document.getElementById("options").innerHTML = "";
+          document.getElementById("jokeSection").style.display = "block";
+        }
+      } else {
+        alert("❌ Try again. Think like a genius with a sense of humor!");
+      }
+    }
+
+    document.getElementById("fetchJoke").addEventListener("click", () => {
+      fetch("https://official-joke-api.appspot.com/random_joke")
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("joke").textContent = `${data.setup} - ${data.punchline}`;
+        })
+        .catch(() => {
+          document.getElementById("joke").textContent = "Oops! Couldn't fetch a joke right now.";
+        });
+    });
+
+    showQuestion();
+  </script>
+</body>
+</html>
